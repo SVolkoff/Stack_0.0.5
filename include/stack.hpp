@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <algorithm>
-#include <new>
+#include <mutex>
 #ifndef STACK_HPP
 #define STACK_HPP
 template <typename T> class stack
