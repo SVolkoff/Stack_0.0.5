@@ -4,7 +4,7 @@
 #include <chrono>
 #include <thread>
 
-void produser (stack<int> &st)
+void producer (stack<int> &st)
 {
    for (;;)
     {
@@ -25,9 +25,11 @@ void consumer (stack<int> &st)
 int main()
 {
 	stack<int> st1;
-	std::thread t1(consumer, std::ref(st1));
-	std::thread t2(producer, std::ref(st1));
-	t1.join();
-	t2.join();
-	return 0;
-};
+	
+	std::thread prod(producer, std::ref(st1));
+	std::thread cons(consumer, std::ref(st1));
+	
+	prod.join();
+	cons.join();
+  return 0;
+}
