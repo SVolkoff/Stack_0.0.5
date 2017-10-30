@@ -45,6 +45,7 @@ stack<T>::~stack() noexcept
 template<typename T>
 stack<T>::stack(const stack<T>& other)
 {
+	mutex_.lock();
 	try
 	{
 		T* tmparray_ = new T[other.array_size_];
@@ -63,47 +64,58 @@ stack<T>::stack(const stack<T>& other)
 		std::cerr << "error";
 		delete[] array_;
 	}
+	mutex_.lock();
 }
 
 template <typename T>
 bool stack<T>::isempty() const noexcept
 {
+	mutex_.lock();
 	return (count_ == 0);
+	mutex_.unlock();
 }
 
 
 template <typename T>
 void stack<T>::swap(stack<T> & other) noexcept
 {
+	mutex_.lock();
 	std::swap(other.array_size_, array_size_);
 	std::swap(count_, other.count_);
 	std::swap(other.array_, array_);
+	mutex_.unlock();
 }
 
 template<typename T>
 stack<T>& stack<T>::operator= (stack<T> const & other) 
 {
+	mutex_.lock();
 	if (&other != this)
 	{
 		stack(other).swap(*this);
 	}
 	return *this;
+	mutex_.unlock();
 }
 
 template<typename T>
 void stack<T>::print() const
 {
+	mutex_.lock();
 	if (isempty()) std::cout << "Stack is empty" << std::endl;
 	else
 		for (int i = 0; i < count_; i++)
 			std::cout << array_[i] << ' ';
 	std::cout << std::endl;
+	mutex_.unlock();
 }
 
 template<typename T>
 size_t stack<T>::count() const noexcept
 {
+	mutex_.lock();
 	return count_;
+	mutex_.unlock();
 }
 
 template <typename T>
@@ -120,12 +132,13 @@ void stack<T>::pop()
 template <typename T>
 T stack<T>::top() const
 {
+	mutex_.lock();
 	if (isempty())
 	{
 		throw std::logic_error("Stack is empty!");
 	}
-
 	return array_[count_ - 1];
+	mutex_.lock();
 }
 template<typename T>
 void stack<T>::push(T const & value)
