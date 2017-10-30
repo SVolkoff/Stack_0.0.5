@@ -18,7 +18,7 @@ public:
 	bool isempty() const noexcept;
 
 private:
-	std::mutex mutex;
+	std::mutex mutex_;
 	T * array_;
 	size_t array_size_;
 	size_t count_;
@@ -108,13 +108,13 @@ size_t stack<T>::count() const noexcept
 template <typename T>
 void stack<T>::pop()
 {
-	mutex.lock();
+	mutex_.lock();
 	if (isempty())
 	{
 		throw std::logic_error("Stack is empty!");
 	}
 	count_--;
-	mutex.unlock();
+	mutex_.unlock();
 }
 template <typename T>
 T stack<T>::top() const
@@ -129,7 +129,7 @@ T stack<T>::top() const
 template<typename T>
 void stack<T>::push(T const & value)
 {
-	mutex.lock();
+	mutex_.lock();
 	if (array_size_ == count_)
 	{
 		size_t ar_size;
@@ -156,7 +156,7 @@ void stack<T>::push(T const & value)
 	}
 	array_[count_] = value;
 	count_++;
-	mutex.unlock();
+	mutex_.unlock();
 }
 
 #endif 
