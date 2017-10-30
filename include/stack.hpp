@@ -64,7 +64,7 @@ stack<T>::stack(const stack<T>& other)
 		std::cerr << "error";
 		delete[] array_;
 	}
-	mutex_.lock();
+	mutex_.unlock();
 }
 
 template <typename T>
@@ -138,7 +138,7 @@ T stack<T>::top() const
 		throw std::logic_error("Stack is empty!");
 	}
 	return array_[count_ - 1];
-	mutex_.lock();
+	mutex_.unlock();
 }
 template<typename T>
 void stack<T>::push(T const & value)
