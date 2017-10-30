@@ -29,4 +29,5 @@ int main()
 	std::thread t2(producer, std::ref(st1));
 	t1.join();
 	t2.join();
+	return 0;
 };
