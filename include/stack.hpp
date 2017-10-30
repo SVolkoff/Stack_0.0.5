@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <algorithm>
 #include <mutex>
+
 #ifndef STACK_HPP
 #define STACK_HPP
 template <typename T> class stack
@@ -19,11 +20,11 @@ public:
 	bool isempty() const noexcept;
 
 private:
-	std::mutex mutex_;
 	T * array_;
 	size_t array_size_;
 	size_t count_;
 	void swap(stack<T>&) noexcept;
+	std::mutex mutex_;
 };
 
 
