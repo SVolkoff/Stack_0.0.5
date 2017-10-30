@@ -24,7 +24,7 @@ private:
 	size_t array_size_;
 	size_t count_;
 	void swap(stack<T>&) noexcept;
-	std::mutex mutex_;
+	mutable std::mutex mutex_;
 };
 
 
