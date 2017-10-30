@@ -2,70 +2,31 @@
 #include "stack.hpp"
 #include <string>
 #include "stack.hpp"
+#include <thread>
 
+template<typename T>
+void producer(stack<T> &st)
+{
+	for (;;)
+	{
+		st.push(rand());
+		std::this_thread::sleep_for(std::chrono::seconds(std::rand() % (3) + 1));
+	}
+}
+template<typename T>
+void consumer(stack<T>& st)
+{
+	for (;;)
+	{
+		st.pop();
+		std::this_thread::sleep_for(std::chrono::seconds(std::rand() % (3) + 2));
+	}
+}
 int main()
 {
-	stack<int> st;
-	char ch = ' ';
-	while (std::cin >> ch)
-	{
-		int val = 0;
-		switch (ch)
-		{
-
-		case'+':
-			if (!(std::cin >> val))
-			{
-				std::cin.clear();
-				std::cout << "An error has occurred while reading arguments" << std::endl; 
-				while (std::cin.get() != '\n') continue;
-			}
-			else
-				st.push(val);	
-				break;
-
-		case'-':
-			if (st.isempty())
-			{
-				std::cout << "Stack is empty" << std::endl;
-			}
-			else 
-			{
-				std::cout << st.top() << std::endl;
-				st.pop();
-			}
-
-		case'=':
- 			if (st.isempty())
-  			{
-  				std::cout << "Stack is empty" << std::endl;
-  			}
-  			else 
- 				st.print();
- 			break;
-
-		case'?':
-			if (st.isempty()) 
-			{
-				std::cout << "Stack is empty" << std::endl;
-			}
-			else
-			{
-				val = st.top();
-				std::cout << val << std::endl;
-			}
-			break;
-
-		case'e':
-			std::getchar();
-			return 0;
-			break;
-
-		default:
-			std::cout << "An error has occurred while reading arguments";
-		}
-	}
-
-	system("pause");
-	return 0;
-}
+	stack<int> st1;
+	std::thread t1(consumer, std::ref(st1));
+	std::thread t2(producer, std::ref(st1));
+	t1.join();
+	t2.join();
+};
