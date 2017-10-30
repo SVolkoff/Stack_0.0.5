@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <algorithm>
+#include <new>
 #ifndef STACK_HPP
 #define STACK_HPP
 template <typename T> class stack
