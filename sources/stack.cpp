@@ -4,24 +4,24 @@
 #include "stack.hpp"
 #include <thread>
 
-template<typename T>
-void producer(stack<T> &st)
+void produser (stack<int> &st)
 {
-	for (;;)
-	{
-		st.push(rand());
-		std::this_thread::sleep_for(std::chrono::seconds(std::rand() % (3) + 1));
-	}
+   for (;;)
+    {
+      st.push(rand()%10);
+      std::this_thread::sleep_for(std::chrono::seconds(std::rand() % (3) + 1));
+    }
 }
-template<typename T>
-void consumer(stack<T>& st)
+
+void consumer (stack<int> &st)
 {
-	for (;;)
-	{
-		st.pop();
-		std::this_thread::sleep_for(std::chrono::seconds(std::rand() % (3) + 2));
-	}
+   for (;;)
+    {
+       st.pop();
+       std::this_thread::sleep_for(std::chrono::seconds(std::rand() % (3) +2 ));
+    }
 }
+
 int main()
 {
 	stack<int> st1;
