@@ -46,7 +46,7 @@ stack<T>::~stack() noexcept
 template<typename T>
 stack<T>::stack(const stack<T>& other)
 {
-	std::lock_guard<std::mutex> lock(object.mutex_);
+	std::lock_guard<std::mutex> lock(other.mutex_);
 	try
 	{
 		T* tmparray_ = new T[other.array_size_];
