@@ -117,7 +117,7 @@ size_t stack<T>::count() const noexcept
 template <typename T>
 auto stack<T>::pop() -> std::shared_ptr<T>
 {
-	std::lock_guard<std::mutex> lock(std::mutex mutex_);
+	std::lock_guard<std::mutex> lock(mutex_);
 	if (isempty())
 	{
 		throw ("Stack is empty!");
@@ -130,7 +130,7 @@ auto stack<T>::pop() -> std::shared_ptr<T>
 template<typename T>
 void stack<T>::push(T const & value)
 {
-	std::lock_guard<std::mutex> lock(std::mutex mutex_);
+	std::lock_guard<std::mutex> lock(mutex_);
 	if (array_size_ == count_)
 	{
 		size_t ar_size;
