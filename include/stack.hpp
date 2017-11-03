@@ -90,7 +90,7 @@ void stack<T>::swap(stack<T> & other) noexcept
 template<typename T>
 stack<T>& stack<T>::operator= (stack<T> const & other)
 {
-	std::lock_guard<std::mutex> lock(obj.mutex_);
+	std::lock_guard<std::mutex> lock(other.mutex_);
 	if (&other != this)
 	{
 		stack(other).swap(*this);
