@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <algorithm>
 #include <mutex>
+#include <memory>
 
 #ifndef STACK_HPP
 #define STACK_HPP
@@ -14,8 +15,7 @@ public:
 	stack<T> & operator=(stack<T> const & other); /*strong*/
 	size_t count() const noexcept;
 	void push(T const &); /*strong*/
-	void pop(); /*strong*/
-	T top() const; /*strong*/
+	auto pop()->std::shared_ptr<T>; /*strong*/
 	void print() const; /*strong*/
 	bool isempty() const noexcept;
 
@@ -46,13 +46,13 @@ stack<T>::~stack() noexcept
 template<typename T>
 stack<T>::stack(const stack<T>& other)
 {
-	mutex_.lock();
+	std::lock_guard<std::mutex> lock(object.mutex_);
 	try
 	{
 		T* tmparray_ = new T[other.array_size_];
 		std::copy(other.array_, other.array_ + other.array_size_, tmparray_);
 		array_ = tmparray_;
-		array_size_=other.array_size_;
+		array_size_ = other.array_size_;
 		count_ = other.count_;
 	}
 	catch (std::exception &err)
@@ -60,35 +60,35 @@ stack<T>::stack(const stack<T>& other)
 		std::cerr << err.what() << std::endl;
 		delete[] array_;
 	}
-	catch(...) 
+	catch (...)
 	{
 		std::cerr << "error";
 		delete[] array_;
 	}
-	mutex_.unlock();
 }
 
 template <typename T>
 bool stack<T>::isempty() const noexcept
 {
-	mutex_.lock();
+	std::lock_guard<std::mutex> lock(mutex_);
 	return (count_ == 0);
-	mutex_.unlock();
 }
 
 
 template <typename T>
 void stack<T>::swap(stack<T> & other) noexcept
 {
-	mutex_.lock();
+	std::lock(mutex_, other.mutex_);
 	std::swap(other.array_size_, array_size_);
 	std::swap(count_, other.count_);
 	std::swap(other.array_, array_);
 	mutex_.unlock();
+	mutex_.unlock();
+	other.mutex_.unlock();
 }
 
 template<typename T>
-stack<T>& stack<T>::operator= (stack<T> const & other) 
+stack<T>& stack<T>::operator= (stack<T> const & other)
 {
 	mutex_.lock();
 	if (&other != this)
@@ -102,49 +102,38 @@ stack<T>& stack<T>::operator= (stack<T> const & other)
 template<typename T>
 void stack<T>::print() const
 {
-	mutex_.lock();
+	std::lock_guard<std::mutex> lock(mutex_);
 	if (isempty()) std::cout << "Stack is empty" << std::endl;
 	else
 		for (int i = 0; i < count_; i++)
 			std::cout << array_[i] << ' ';
 	std::cout << std::endl;
-	mutex_.unlock();
 }
 
 template<typename T>
 size_t stack<T>::count() const noexcept
 {
-	mutex_.lock();
+	std::lock_guard<std::mutex> lock(mutex_);
 	return count_;
-	mutex_.unlock();
 }
 
 template <typename T>
-void stack<T>::pop()
+auto stack<T>::pop() -> std::shared_ptr<T>
 {
-	mutex_.lock();
+	std::lock_guard<std::mutex> lock(std::mutex mutex_);
 	if (isempty())
 	{
 		throw std::logic_error("Stack is empty!");
 	}
+	auto top = std::make_shared<T>(array_[count_ - 1]);
 	count_--;
-	mutex_.unlock();
+	return top;
 }
-template <typename T>
-T stack<T>::top() const
-{
-	mutex_.lock();
-	if (isempty())
-	{
-		throw std::logic_error("Stack is empty!");
-	}
-	return array_[count_ - 1];
-	mutex_.unlock();
-}
+
 template<typename T>
 void stack<T>::push(T const & value)
 {
-	mutex_.lock();
+	std::lock_guard<std::mutex> lock(std::mutex mutex_);
 	if (array_size_ == count_)
 	{
 		size_t ar_size;
@@ -164,14 +153,14 @@ void stack<T>::push(T const & value)
 		{
 			std::cerr << err.what() << std::endl;
 		}
-		catch(...) 
-		{	
+		catch (...)
+		{
 			std::cerr << "error";
 		}
 	}
 	array_[count_] = value;
 	count_++;
-	mutex_.unlock();
+	
 }
 
 #endif 
