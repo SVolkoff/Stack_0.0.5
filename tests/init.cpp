@@ -15,7 +15,7 @@ SCENARIO("stack init object" )
 	st1.push(3);
 	stack<int> st2(st1);
 	REQUIRE(st1.count() ==3 ); 
-	//REQUIRE(st1.count() == st2.count());
+	REQUIRE(st1.count() == st2.count());
 }
 
 SCENARIO("stack op=")
@@ -27,7 +27,7 @@ SCENARIO("stack op=")
 	st1.push(3);
 	stack<int> st2 = st1;
 	REQUIRE(st1.count() ==3 ); 
-	//REQUIRE(st1.count() == st2.count() );
+	REQUIRE(st1.count() == st2.count() );
 }
 
 SCENARIO("stack push")
@@ -41,7 +41,7 @@ SCENARIO("stack push")
 	st.push(78);
 	REQUIRE(st.count() == 3);
 }
-/*
+
 SCENARIO("pop") 
 {
 	stack<int> st;
@@ -50,11 +50,11 @@ SCENARIO("pop")
 	st.push(3);
 	int val = *st.pop();
 	REQUIRE(st.count() == 2);
-	//REQUIRE(val == 3);
+	REQUIRE(val == 3);
 	val = *st.pop();
 	REQUIRE(st.count() == 1);
-	//REQUIRE(val == 2);
+	REQUIRE(val == 2);
 	val = *st.pop();
 	REQUIRE(st.count() == 0);
 	REQUIRE(val == 1);
-}*/
+}
