@@ -1,5 +1,5 @@
 #include <catch.hpp>
-#include <stack.hpp>
+#include "stack.hpp"
 
 SCENARIO("stack init")
 {
