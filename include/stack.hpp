@@ -1,6 +1,4 @@
 #include <iostream>
-#include <stdexcept>
-#include <algorithm>
 #include <mutex>
 #include <memory>
 
@@ -54,11 +52,6 @@ stack<T>::stack(const stack<T>& other)
 		array_ = tmparray_;
 		array_size_ = other.array_size_;
 		count_ = other.count_;
-	}
-	catch (std::exception &err)
-	{
-		std::cerr << err.what() << std::endl;
-		delete[] array_;
 	}
 	catch (...)
 	{
@@ -145,10 +138,6 @@ void stack<T>::push(T const & value)
 			delete[] array_;
 			array_ = ptr;
 			array_size_ = ar_size;
-		}
-		catch (std::exception &err)
-		{
-			std::cerr << err.what() << std::endl;
 		}
 		catch (...)
 		{
